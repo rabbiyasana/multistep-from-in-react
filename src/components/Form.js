@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { Container, Row, Col } from "react-bootstrap";
+import Form from "react-bootstrap/Form";
 const MultiStepForm = () => {
   const [fromData, setFormData] = useState({
     step: 1,
@@ -30,11 +32,17 @@ const MultiStepForm = () => {
     }));
   };
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    localStorage.setItem("formData", JSON.stringify(fromData));
+    console.log("Email sent successfully!");
+  };
   const formComponent = {
     1: (
       <div>
         <label>First Name:</label>
         <input
+          className="form-group"
           type="text"
           name="firstName"
           value={firstName}
@@ -82,12 +90,13 @@ const MultiStepForm = () => {
         <p>Email: {email}</p>
         <p>Password: {password}</p>
         <button onClick={prevStep}>Previous</button>
+        <button onClick={handleSubmit}>submit</button>
       </div>
     ),
   };
   return (
     <div>
-      <h1>Multi-Step Form</h1>
+      <h1>Multi Step Form</h1>
       {formComponent[step]}
     </div>
   );
