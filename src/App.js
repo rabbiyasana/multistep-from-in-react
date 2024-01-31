@@ -1,9 +1,9 @@
 import "./App.css";
-
+import MultiStepForm from "./components/Form";
 function App() {
   return (
     <div className="App">
-      <h1>Multi Step form</h1>
+      <MultiStepForm />
     </div>
   );
 }
