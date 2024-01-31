@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { Navigate } from "react-router-dom";
+
 import { Container, Row, Col, Button } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 const MultiStepForm = () => {
@@ -7,10 +9,12 @@ const MultiStepForm = () => {
     step: 1,
     firstName: "",
     lastName: "",
+    gender: "",
     email: "",
     password: "",
   });
-  const { step, firstName, lastName, email, password } = fromData;
+  const { step, firstName, lastName, gender, email, password } = fromData;
+  const [submitted, setSubmitted] = useState(false);
   const nextStep = () => {
     setFormData((prevState) => ({
       ...prevState,
@@ -38,6 +42,7 @@ const MultiStepForm = () => {
     localStorage.setItem("formData", JSON.stringify(fromData));
     console.log("Email sent successfully!");
     setFormData({});
+    setSubmitted(true);
   };
   const formComponent = {
     1: (
@@ -99,6 +104,46 @@ const MultiStepForm = () => {
       </Form>
     ),
     3: (
+      <Form>
+        <Form.Group controlId="gender">
+          <Form.Label>Gender:</Form.Label>
+          <Form.Check
+            type="radio"
+            label="Male"
+            name="gender"
+            value="male"
+            checked={gender === "male"}
+            onChange={handleChange}
+          />
+          <Form.Check
+            type="radio"
+            label="Female"
+            name="gender"
+            value="female"
+            checked={gender === "female"}
+            onChange={handleChange}
+          />
+          <Form.Check
+            type="radio"
+            label="Other"
+            name="gender"
+            value="other"
+            checked={gender === "other"}
+            onChange={handleChange}
+          />
+        </Form.Group>
+        <br />
+        <Form.Group>
+          <Button variant="secondary" onClick={prevStep}>
+            Previous
+          </Button>
+          <Button variant="primary" onClick={nextStep}>
+            Next
+          </Button>
+        </Form.Group>
+      </Form>
+    ),
+    4: (
       <div>
         <h2>Summary</h2>
         <p>First Name: {firstName}</p>
@@ -114,6 +159,9 @@ const MultiStepForm = () => {
       </div>
     ),
   };
+  if (submitted) {
+    return <Navigate to="/thankyou" />;
+  }
   return (
     <div>
       <h1>Multi Step Form</h1>

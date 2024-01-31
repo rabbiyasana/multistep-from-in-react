@@ -1,17 +1,15 @@
 import "./App.css";
-import { Container, Row, Col } from "react-bootstrap";
-import MultiStepForm from "./components/Form";
+import "bootstrap/dist/css/bootstrap.min.css";
+import { BrowserRouter } from "react-router-dom";
+import React from "react";
+import { AllRoutes } from "./routes/Routes";
 function App() {
   return (
-    <div className="App">
-      <Container>
-        <Row>
-          {/* <Col lg={{ span: 6, offset: 3 }}> */}
-          <MultiStepForm />
-          {/* </Col> */}
-        </Row>
-      </Container>
-    </div>
+    <>
+      <BrowserRouter>
+        <AllRoutes />
+      </BrowserRouter>
+    </>
   );
 }
 
