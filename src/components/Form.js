@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { Container, Row, Col } from "react-bootstrap";
+import "bootstrap/dist/css/bootstrap.min.css";
+import { Container, Row, Col, Button } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 const MultiStepForm = () => {
   const [fromData, setFormData] = useState({
@@ -36,51 +37,66 @@ const MultiStepForm = () => {
     e.preventDefault();
     localStorage.setItem("formData", JSON.stringify(fromData));
     console.log("Email sent successfully!");
+    setFormData({});
   };
   const formComponent = {
     1: (
-      <div>
-        <label>First Name:</label>
-        <input
-          className="form-group"
-          type="text"
-          name="firstName"
-          value={firstName}
-          onChange={handleChange}
-        />
-        <br />
-        <label>Last Name:</label>
-        <input
-          type="text"
-          name="lastName"
-          value={lastName}
-          onChange={handleChange}
-        />
-        <br />
-        <button onClick={nextStep}>Next</button>
-      </div>
+      <Form>
+        <Form.Group controlId="firstName">
+          <Form.Label>First Name:</Form.Label>
+          <Form.Control
+            type="text"
+            name="firstName"
+            value={firstName}
+            onChange={handleChange}
+          />
+        </Form.Group>
+        <Form.Group controlId="lastName">
+          <Form.Label>Last Name:</Form.Label>
+          <Form.Control
+            type="text"
+            name="lastName"
+            value={lastName}
+            onChange={handleChange}
+          />
+        </Form.Group>
+        <br></br>
+        <Button variant="primary" onClick={nextStep}>
+          Next
+        </Button>{" "}
+      </Form>
     ),
     2: (
-      <div>
-        <label>Email:</label>
-        <input
-          type="email"
-          name="email"
-          value={email}
-          onChange={handleChange}
-        />
-        <br />
-        <label>Password:</label>
-        <input
-          type="password"
-          name="password"
-          value={password}
-          onChange={handleChange}
-        />
-        <br />
-        <button onClick={prevStep}>Previous</button>
-        <button onClick={nextStep}>Next</button>
-      </div>
+      <Form>
+        <Form.Group controlId="email">
+          <Form.Label>Email:</Form.Label>
+          <Form.Control
+            type="email"
+            name="email"
+            value={email}
+            onChange={handleChange}
+          />
+        </Form.Group>
+        <Form.Group controlId="password">
+          <Form.Label>Password:</Form.Label>
+          <Form.Control
+            type="password"
+            name="password"
+            value={password}
+            onChange={handleChange}
+          />
+        </Form.Group>
+        <br></br>
+        <Form.Group>
+          <Button variant="secondary" onClick={prevStep}>
+            Previous
+          </Button>
+
+          <Button variant="primary" onClick={nextStep}>
+            Next
+          </Button>
+        </Form.Group>
+      </Form>
     ),
     3: (
       <div>
@@ -89,8 +105,12 @@ const MultiStepForm = () => {
         <p>Last Name: {lastName}</p>
         <p>Email: {email}</p>
         <p>Password: {password}</p>
-        <button onClick={prevStep}>Previous</button>
-        <button onClick={handleSubmit}>submit</button>
+        <Button variant="secondary" onClick={prevStep}>
+          Previous
+        </Button>
+        <Button variant="primary" onClick={handleSubmit}>
+          submit
+        </Button>
       </div>
     ),
   };
