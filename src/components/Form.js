@@ -15,6 +15,32 @@ const MultiStepForm = () => {
   });
   const { step, firstName, lastName, gender, email, password } = fromData;
   const [submitted, setSubmitted] = useState(false);
+  const [errors, setErrorss] = useState({});
+
+  // validation for form input
+
+  const findFormErrors = () => {
+    const { step, firstName, lastName, gender, email, password } = fromData;
+    const newErrors = {};
+    if (!firstName || firstName === "") newErrors.firstName = "cannot be blank";
+    else if (firstName.length > 15)
+      newErrors.firstName = "first name is too long";
+
+    if (!lastName || lastName === "") newErrors.lastName = "cannot be blank";
+    else if (lastName.length > 15) newErrors.lastName = "last name is too long";
+
+    if (!email || email === "") newErrors.email = "cannot be blank";
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      newErrors.email = "Invalid email format!";
+    }
+    if (!password || password === "") newErrors.password = "cannot be blank";
+    else if (password.length < 8)
+      password.city = " password must be atleast 8 char";
+
+    if (!gender) newErrors.gender = "please select your gender";
+    return newErrors;
+  };
+
   const nextStep = () => {
     setFormData((prevState) => ({
       ...prevState,
@@ -39,10 +65,15 @@ const MultiStepForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    localStorage.setItem("formData", JSON.stringify(fromData));
-    console.log("Email sent successfully!");
-    setFormData({});
-    setSubmitted(true);
+    const newErrors = findFormErrors();
+    if (Object.keys(newErrors).length > 0) {
+      setErrorss(newErrors);
+    } else {
+      localStorage.setItem("formData", JSON.stringify(fromData));
+      console.log("Email sent successfully!");
+      setFormData({});
+      setSubmitted(true);
+    }
   };
   const formComponent = {
     1: (
@@ -54,7 +85,11 @@ const MultiStepForm = () => {
             name="firstName"
             value={firstName}
             onChange={handleChange}
+            isInvalid={!!errors.firstName}
           />
+          <Form.Control.Feedback type="invalid">
+            {errors.firstName}
+          </Form.Control.Feedback>
         </Form.Group>
         <Form.Group controlId="lastName">
           <Form.Label>Last Name:</Form.Label>
@@ -63,7 +98,11 @@ const MultiStepForm = () => {
             name="lastName"
             value={lastName}
             onChange={handleChange}
+            isInvalid={!!errors.lastName}
           />
+          <Form.Control.Feedback type="invalid">
+            {errors.lastName}
+          </Form.Control.Feedback>
         </Form.Group>
         <br></br>
         <Button variant="primary" onClick={nextStep}>
@@ -80,7 +119,11 @@ const MultiStepForm = () => {
             name="email"
             value={email}
             onChange={handleChange}
+            isInvalid={!!errors.email}
           />
+          <Form.Control.Feedback type="invalid">
+            {errors.email}
+          </Form.Control.Feedback>
         </Form.Group>
         <Form.Group controlId="password">
           <Form.Label>Password:</Form.Label>
@@ -89,7 +132,11 @@ const MultiStepForm = () => {
             name="password"
             value={password}
             onChange={handleChange}
+            isInvalid={!!errors.password}
           />
+          <Form.Control.Feedback type="invalid">
+            {errors.password}
+          </Form.Control.Feedback>
         </Form.Group>
         <br></br>
         <Form.Group>
@@ -114,6 +161,7 @@ const MultiStepForm = () => {
             value="male"
             checked={gender === "male"}
             onChange={handleChange}
+            isInvalid={!!errors.gender}
           />
           <Form.Check
             type="radio"
@@ -122,6 +170,7 @@ const MultiStepForm = () => {
             value="female"
             checked={gender === "female"}
             onChange={handleChange}
+            isInvalid={!!errors.gender}
           />
           <Form.Check
             type="radio"
@@ -130,8 +179,12 @@ const MultiStepForm = () => {
             value="other"
             checked={gender === "other"}
             onChange={handleChange}
+            isInvalid={!!errors.gender}
           />
         </Form.Group>
+        <Form.Control.Feedback type="invalid">
+          {errors.gender}
+        </Form.Control.Feedback>
         <br />
         <Form.Group>
           <Button variant="secondary" onClick={prevStep}>
@@ -163,10 +216,14 @@ const MultiStepForm = () => {
     return <Navigate to="/thankyou" />;
   }
   return (
-    <div>
-      <h1>Multi Step Form</h1>
-      {formComponent[step]}
-    </div>
+    <Container>
+      <Row className="mt-5">
+        <Col md={{ span: 8, offset: 2 }} lg={{ span: 6, offset: 3 }}>
+          <h1>Multi Step Form</h1>
+          {formComponent[step]}
+        </Col>
+      </Row>
+    </Container>
   );
 };
 export default MultiStepForm;

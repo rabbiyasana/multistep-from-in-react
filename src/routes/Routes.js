@@ -1,4 +1,4 @@
-import { Routes, Route, BrowserRouter } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import MultiStepForm from "../components/Form";
 import Thankyou from "../components/Thankyou.";
 const AllRoutes = () => {

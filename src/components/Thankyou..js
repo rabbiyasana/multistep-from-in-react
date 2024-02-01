@@ -1,7 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Container, Row, Col, Button } from "react-bootstrap";
-import Form from "react-bootstrap/Form";
+import { Container, Row, Col } from "react-bootstrap";
 function Thankyou() {
   return (
     <>
