@@ -48,9 +48,8 @@ const MultiStepForm = () => {
   const nextStep = () => {
     const newErrors = findFormErrors();
     if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors); // Corrected setErrorss to setErrors
+      setErrors(newErrors);
     } else {
-      console.log("Moving to next step with state:", FormData);
       setFormData((prevState) => ({
         ...prevState,
         step: prevState.step + 1,
