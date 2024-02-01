@@ -15,37 +15,47 @@ const MultiStepForm = () => {
   });
   const { step, firstName, lastName, gender, email, password } = fromData;
   const [submitted, setSubmitted] = useState(false);
-  const [errors, setErrorss] = useState({});
+  const [errors, setErrors] = useState({});
 
   // validation for form input
 
   const findFormErrors = () => {
-    const { step, firstName, lastName, gender, email, password } = fromData;
+    const { firstName, lastName, gender, email, password } = fromData;
     const newErrors = {};
-    if (!firstName || firstName === "") newErrors.firstName = "cannot be blank";
-    else if (firstName.length > 15)
-      newErrors.firstName = "first name is too long";
+    if (step === 1) {
+      if (!firstName || firstName === "")
+        newErrors.firstName = "cannot be blank";
+      else if (firstName.length > 15)
+        newErrors.firstName = "first name is too long";
 
-    if (!lastName || lastName === "") newErrors.lastName = "cannot be blank";
-    else if (lastName.length > 15) newErrors.lastName = "last name is too long";
-
-    if (!email || email === "") newErrors.email = "cannot be blank";
-    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      newErrors.email = "Invalid email format!";
+      if (!lastName || lastName === "") newErrors.lastName = "cannot be blank";
+      else if (lastName.length > 15)
+        newErrors.lastName = "last name is too long";
+    } else if (step === 2) {
+      if (!email || email === "") newErrors.email = "cannot be blank";
+      else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        newErrors.email = "Invalid email format!";
+      }
+      if (!password || password === "") newErrors.password = "cannot be blank";
+      else if (password.length < 8)
+        password.city = " password must be atleast 8 char";
+    } else {
+      if (!gender) newErrors.gender = "please select your gender";
     }
-    if (!password || password === "") newErrors.password = "cannot be blank";
-    else if (password.length < 8)
-      password.city = " password must be atleast 8 char";
-
-    if (!gender) newErrors.gender = "please select your gender";
     return newErrors;
   };
 
   const nextStep = () => {
-    setFormData((prevState) => ({
-      ...prevState,
-      step: prevState.step + 1,
-    }));
+    const newErrors = findFormErrors();
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors); // Corrected setErrorss to setErrors
+    } else {
+      console.log("Moving to next step with state:", FormData);
+      setFormData((prevState) => ({
+        ...prevState,
+        step: prevState.step + 1,
+      }));
+    }
   };
 
   const prevStep = () => {
@@ -65,15 +75,11 @@ const MultiStepForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const newErrors = findFormErrors();
-    if (Object.keys(newErrors).length > 0) {
-      setErrorss(newErrors);
-    } else {
-      localStorage.setItem("formData", JSON.stringify(fromData));
-      console.log("Email sent successfully!");
-      setFormData({});
-      setSubmitted(true);
-    }
+
+    localStorage.setItem("formData", JSON.stringify(fromData));
+    console.log("Email sent successfully!");
+    setFormData({});
+    setSubmitted(true);
   };
   const formComponent = {
     1: (
